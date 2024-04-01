@@ -1,4 +1,4 @@
-# Projet final - Coup de pousse
+# Projet final Alyra - Coup de pousse
 
 ## Team
 
