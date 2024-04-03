@@ -6,6 +6,7 @@ const Header = () => {
 	return (
 		<Flex justifyContent="space-between" alignItems="center" p="2rem">
 			<Link href="/">Logo</Link>
+			<Link href="/staking">Staking</Link>
 			<Link href="/contributeur">Contributeur</Link>
 			<Link href="/association">Association</Link>
 			<Link href="/adherent">Adherent</Link>
