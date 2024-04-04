@@ -35,14 +35,6 @@ async function main() {
 	]);
 	await cdpStaking.waitForDeployment();
 	console.log(`CDPStaking contract deployed to ${cdpStaking.target}`);
-
-	// deploy USDC token
-	const usdcERC20 = await ethers.deployContract("USDCToken");
-	await usdcERC20.waitForDeployment();
-	console.log(`USDCToken contract deployed to ${usdcERC20.target}`);
-
-	// const [owner] = await ethers.getSigners();
-	await cdpStaking.createPool(usdcERC20, 1);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

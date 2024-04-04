@@ -11,8 +11,8 @@ async function main() {
 	await usdcERC20.waitForDeployment();
 	console.log(`USDCToken contract deployed to ${usdcERC20.target}`);
 
-	// const [owner] = await ethers.getSigners();
 	await cdpStaking.createPool(usdcERC20, 1);
+	console.log(`New pool with USDCToken deployed`);
 }
 
 main().catch((error) => {

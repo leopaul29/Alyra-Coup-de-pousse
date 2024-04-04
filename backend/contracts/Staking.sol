@@ -56,6 +56,8 @@ contract CDPStaking is Ownable(msg.sender) {
             weight: _weight
             // rewardTokenPerShare: 100
         }));
+
+        // event
     }
 
     struct UserInfo {
