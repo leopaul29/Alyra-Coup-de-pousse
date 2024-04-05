@@ -59,7 +59,8 @@ contract CDPStaking is Ownable(msg.sender) {
 
         // event
     }
-
+// mapping(address => uint256) balanceOfUSDC;
+// mapping(address => uint256) balanceOfCDP;
     struct UserInfo {
         uint256  lpToken; // total staked token
         uint256  blockStart; // begining of the staking
@@ -90,10 +91,10 @@ contract CDPStaking is Ownable(msg.sender) {
     function stake(uint256 _pid, uint256 _amount) external updateReward(_pid, msg.sender) {
         require(_amount > 0, "_amount = 0");
         PoolInfo memory pool = poolInfo[_pid];
-        totalSupply += _amount * pool.weight; // = balance contract
+        totalSupply += _amount; // = balance contract
         
         UserInfo storage user = userInfo[msg.sender];
-        user.lpToken += _amount * pool.weight; // = balance user
+        user.lpToken += _amount; // = balance user
         user.blockStart = block.number;
 
         pool.token.transferFrom(msg.sender, address(this), _amount);
