@@ -1,7 +1,7 @@
 import { getAddress } from "viem";
-export const contractAddress =
+export const usdcTokenAddress =
 	getAddress(process.env.NEXT_PUBLIC_USDCTOKEN_CONTRACT_ADDRESS) || undefined;
-export const contractAbi = [
+export const usdcTokenAbi = [
 	{
 		inputs: [],
 		stateMutability: "nonpayable",
