@@ -1,11 +1,11 @@
 import { cdpStakingAbi, cdpStakingAddress } from "@/constants/cdpStaking";
-import { Heading } from "@chakra-ui/react";
+import { Box, Heading, Stack } from "@chakra-ui/react";
 import { useReadContract, useAccount } from "wagmi";
 import { useState, useEffect } from "react";
+import PoolInfo from "./PoolInfo";
 
 const Staking = () => {
 	const { address } = useAccount();
-	const [pool, setPool] = useState({});
 
 	// --- poolInfo
 	//
@@ -16,35 +16,40 @@ const Staking = () => {
 		account: address,
 	});
 	console.log("poolLength", poolLength);
-	const { data: poolInfo } = useReadContract({
-		address: cdpStakingAddress,
-		abi: cdpStakingAbi,
-		functionName: "poolInfo",
-		account: address,
-		args: ["0"],
-	});
-	useEffect(() => {
-		setPool(poolInfo);
-		console.log("pool", pool);
-		console.log("pool.token", pool.token);
-		console.log("pool.weight", pool.weight);
-	}, []);
+	// userinfo
+	// const { data: userInfo } = useReadContract({
+	// 	address: cdpStakingAddress,
+	// 	abi: cdpStakingAbi,
+	// 	functionName: "userInfo",
+	// 	account: address,
+	// 	args: [address],
+	// });
+	// if (userInfo) {
+	// 	console.log("userInfo", userInfo);
+	// 	console.log("userInfo.lpToken", userInfo.lpToken);
+	// 	console.log("userInfo.blockStart", userInfo.blockStart);
+	// }
 
-	const { data: totalSupply } = useReadContract({
-		address: cdpStakingAddress,
-		abi: cdpStakingAbi,
-		functionName: "totalSupply",
-		account: address,
-	});
-	console.log("totalSupply", totalSupply);
+	// const { data: totalSupply } = useReadContract({
+	// 	address: cdpStakingAddress,
+	// 	abi: cdpStakingAbi,
+	// 	functionName: "totalSupply",
+	// 	account: address,
+	// });
+	// console.log("totalSupply", totalSupply);
 
 	return (
 		<div>
 			<Heading>Pools</Heading>
-			a-{Number(poolLength)}-z a-{Number(totalSupply)}-z
-			{/* {poolTab.map((pool) => (
-				<div>pool: {pool.token}</div>
-			))} */}
+			<Stack>
+				<Box>a-{Number(poolLength)}-z</Box>
+				<Box>{/* a-{Number(totalSupply)}-z */}</Box>
+				<Box>
+					{[...Array(poolLength)].map((e, poolIndex) => (
+						<PoolInfo key={crypto.randomUUID()} poolIndex={Number(poolIndex)} />
+					))}
+				</Box>
+			</Stack>
 		</div>
 	);
 };
