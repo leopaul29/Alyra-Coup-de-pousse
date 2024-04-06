@@ -15,7 +15,9 @@
 		"usdcPool-ll": "yarn hardhat run ./scripts/createUSDCPool.js --network localhost",
 		"usdcPool-se": "yarn hardhat run ./scripts/createUSDCPool.js --network sepolia",
 		"monirot-ll": "yarn hardhat run ./scripts/monitor.js --network localhost",
-		"monirot-se": "yarn hardhat run ./scripts/monitor.js --network sepolia"
+		"monirot-se": "yarn hardhat run ./scripts/monitor.js --network sepolia",
+		"project-ll": "yarn hardhat run ./scripts/createProject.js --network localhost",
+		"monitor-pro-ll": "yarn hardhat run ./scripts/monitorProject.js --network localhost"
 	},
 	"dependencies": {
 		"dotenv": "^16.4.5"

@@ -111,7 +111,7 @@ contract CDPStaking is Ownable(msg.sender) {
 
     function getReward() external {
         uint256 length = poolInfo.length;
-        uint256 points = 0; // use it to calculate reward (pool[allIndex].weigth * lpToken)
+        // uint256 points = 0; // use it to calculate reward (pool[allIndex].weigth * lpToken)
         for(uint256 pid = 0; pid < length; ++pid) {
             UserInfo memory user = userInfo[pid][msg.sender];
             rewardToken.mint(msg.sender, user.rewards);
