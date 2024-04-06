@@ -17,6 +17,7 @@ contract CDPProject {
     }
 
     Project[] public projectInfo;
+    // mapping(address => uint256[]) public favoritesProject;
 
     // CONSTRUCTOR
     // constructor(IERC20 _rewardToken) {
@@ -43,6 +44,9 @@ contract CDPProject {
         _;
     }
 
+    // function favoritesProjectLength(address _account) external view returns (uint256) {
+    //     return favoritesProject[_account].length;
+    // }
     function projectLength() external view returns (uint256) {
         return projectInfo.length;
     }
@@ -95,4 +99,19 @@ contract CDPProject {
         projectInfo[_pid].finished = true;
         // event project finished
     }
+
+    // function addFavoritesProject(address _account, uint256 _pid) external projectExist(_pid) {
+    //     favoritesProject[_account].push(_pid);
+    //     //event add fav
+    // }
+
+    // function removeFavoritesProject(address _account, uint256 _pid) external projectExist(_pid) {
+    //     if (_pid >= favoritesProject[_account].length) return;
+
+    //     for (uint i = _pid; i<favoritesProject[_account].length-1; i++){
+    //         favoritesProject[_account][i] = favoritesProject[_account][i+1];
+    //     }
+    //     favoritesProject[_account].pop();
+    //     //event remove fav
+    // }
 }

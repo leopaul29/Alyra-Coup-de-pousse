@@ -10,95 +10,101 @@ import {
 	GridItem,
 } from "@chakra-ui/react";
 import { Skeleton, SkeletonCircle, SkeletonText } from "@chakra-ui/react";
+import { Card, CardBody, CardFooter } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { readContract } from "viem/actions";
+import { cdpProjectAddress, cdpProjectAbi } from "@/constants/cdpProject";
+import { useAccount } from "wagmi";
+import { publicClient } from "@/utils/client";
 
-const Project = ({ params }) => {
-	const project = {
-		id: 5,
-		slug: "5",
-		title: "title 3",
-		address: "0x123",
-		siret: "AZE123",
-		progress: 70,
-		endBlock: 80,
-		adherents: [
-			{
-				address: "0x132",
-			},
-			{
-				address: "0x132",
-			},
-			{
-				address: "0x132",
-			},
-			{
-				address: "0x132",
-			},
-			{
-				address: "0x132",
-			},
-		],
+const Project = ({ projectIndex }) => {
+	const { address } = useAccount();
+	const [projectInfo, setProjectInfo] = useState({});
+	const [projectAdherents, setProjectAdherents] = useState([]);
+	const [currentBlock, setCurrentCBlock] = useState();
+	const getProjectInfo = async () => {
+		console.log("projectIndex", projectIndex);
+		setCurrentCBlock(await publicClient.getBlockNumber());
+		if (projectIndex) {
+			const projectInfo = await readContract(publicClient, {
+				address: cdpProjectAddress,
+				abi: cdpProjectAbi,
+				functionName: "projectInfo",
+				account: address,
+				args: [projectIndex],
+			});
+			setProjectInfo(projectInfo);
+			const projectAdherents = await readContract(publicClient, {
+				address: cdpProjectAddress,
+				abi: cdpProjectAbi,
+				functionName: "projectAdherents",
+				account: address,
+				args: [projectIndex],
+			});
+			setProjectAdherents(projectAdherents);
+			console.log("projectAdherents", projectAdherents);
+		}
 	};
-	// get le project avec le slug depuis event ou SM
+	useEffect(() => {
+		const getProjectInfoAsync = async () => {
+			if (projectIndex !== "undefined") {
+				await getProjectInfo();
+			}
+		};
+		getProjectInfoAsync();
+	}, []);
 	return (
 		<>
-			<Heading>Project {project.title}</Heading>
-
-			<Stack my="4" spacing="3">
-				<Flex gap="8" mb="4">
-					<Skeleton h="300px" w="500px"></Skeleton>
-					<Box w="50%">
-						<Heading mb={4} size="md">
-							Description
-						</Heading>
-						<SkeletonText
-							noOfLines={3}
-							spacing="4"
-							skeletonHeight="4"
-							mb="12"
-						/>
-						<Heading mb={4} size="md">
-							Progress
-						</Heading>
-						<Progress hasStripe value={project.progress} mb="12" />
-						<Heading mb={4} size="md">
-							Deadline (block nb{project.endBlock})
-						</Heading>
-						<Progress hasStripe value={project.endBlock} mb="12" />
-					</Box>
-				</Flex>
-				<Grid templateColumns="repeat(8, 1fr)" gap={6}>
-					{project.adherents.map((adherent) => (
-						<GridItem>
-							<Link
-								href={`/adherents/${adherent.address}`}
-								key={adherent.address}
-							>
-								<SkeletonCircle size={16} />
-							</Link>
-						</GridItem>
-					))}
-				</Grid>
-				{/* <Stack my="4" spacing="3">
-					<Flex gap="8" mb="12">
-						<SkeletonText
-							noOfLines={8}
-							spacing="4"
-							skeletonHeight="4"
-							w="50%"
-						/>
-						<Skeleton h="300px" w="500px"></Skeleton>
-					</Flex>
-					<Flex gap="8" mb="12">
-						<Skeleton h="300px" w="500px"></Skeleton>
-						<SkeletonText
-							noOfLines={8}
-							spacing="4"
-							skeletonHeight="4"
-							w="50%"
-						/>
-					</Flex>
-				</Stack> */}
-			</Stack>
+			{projectIndex == "undefined" ? (
+				<Skeleton w={200} h={200} />
+			) : (
+				<div>
+					<Heading>Project: {projectInfo[0]}</Heading>
+					<Stack my="4" spacing="3">
+						<Flex gap="8" mb="4">
+							<Skeleton h="300px" w="500px"></Skeleton>
+							<Box w="50%">
+								<Heading mb={4} size="md">
+									Description
+								</Heading>
+								<SkeletonText
+									noOfLines={3}
+									spacing="4"
+									skeletonHeight="4"
+									mb="12"
+								/>
+								<Heading mb={4} size="md">
+									Progress
+								</Heading>
+								<Progress
+									hasStripe
+									value={Number(projectInfo[2]) / Number(projectInfo[1])}
+									mb="12"
+								/>
+								<Heading mb={4} size="md">
+									Deadline (block nb{projectInfo.endBlock})
+								</Heading>
+								Ends at block {Number(projectInfo[3])} block in{" "}
+								{Number(projectInfo[3]) - Number(currentBlock)}{" "}
+							</Box>
+						</Flex>
+						{projectAdherents.length > 0 ? (
+							<Grid templateColumns="repeat(8, 1fr)" gap={6}>
+								{projectAdherents.map((adherentAddress) => (
+									<GridItem key={crypto.randomUUID()}>
+										<Link href={`/adherents/${adherentAddress}`}>
+											<SkeletonCircle size={16} />
+										</Link>
+									</GridItem>
+								))}
+							</Grid>
+						) : (
+							<div>no adherents</div>
+						)}
+					</Stack>
+				</div>
+			)}
 		</>
 	);
 };

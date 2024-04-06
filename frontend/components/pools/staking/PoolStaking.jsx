@@ -80,7 +80,7 @@ const PoolStaking = ({ poolIndex }) => {
 				<div>loading</div>
 			) : (
 				<div>
-					<Heading>pool {name}</Heading>
+					<Heading>Pool: {name}</Heading>
 					<Stack>
 						<Box>balanceUser: {Number(balanceUser)}</Box>
 						<Box>balanceUserOnDapp: {Number(balanceUserOnDapp)}</Box>
