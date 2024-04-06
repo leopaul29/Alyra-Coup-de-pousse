@@ -1,3 +1,4 @@
+import { publicClient } from "@/utils/client";
 import {
 	Heading,
 	Link,
@@ -10,32 +11,69 @@ import {
 import { Card, CardBody, CardFooter } from "@chakra-ui/react";
 import { Skeleton, SkeletonText } from "@chakra-ui/react";
 import { Button } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { readContract } from "viem/actions";
+import { cdpProjectAddress, cdpProjectAbi } from "@/constants/cdpProject";
+import { useAccount } from "wagmi";
 
-const ProjectCard = ({ project }) => {
+const ProjectCard = ({ projectIndex }) => {
+	const { address } = useAccount();
+	const [projectInfo, setProjectInfo] = useState({});
+	const [currentBlock, setCurrentCBlock] = useState();
+	const getProjectInfo = async () => {
+		setCurrentCBlock(await publicClient.getBlockNumber());
+		const projectInfo = await readContract(publicClient, {
+			address: cdpProjectAddress,
+			abi: cdpProjectAbi,
+			functionName: "projectInfo",
+			account: address,
+			args: [projectIndex],
+		});
+		setProjectInfo(projectInfo);
+		console.log("projectInfo", projectInfo);
+	};
+	useEffect(() => {
+		const getProjectInfoAsync = async () => {
+			if (projectIndex !== "undefined") {
+				await getProjectInfo();
+			}
+		};
+		getProjectInfoAsync();
+	}, []);
 	return (
-		<Card maxW="sm">
-			<CardBody>
-				<Stack mt="6" spacing="3">
-					<Skeleton h="150px" w="300px"></Skeleton>
-					<Heading size="md">{project.title}</Heading>
-					<SkeletonText></SkeletonText>
-				</Stack>
-			</CardBody>
-			<Divider />
-			<CardFooter>
-				<Stack spacing="3" w="100%">
-					<Progress hasStripe value={project.progress} />
-					<Flex justify="space-between">
-						<Text color="blue.600" fontSize="2xl">
-							Ends in X block
-						</Text>
-						<Link href={`/v2/projects/${project.slug}`}>
-							<Button>See</Button>
-						</Link>
-					</Flex>
-				</Stack>
-			</CardFooter>
-		</Card>
+		<>
+			{projectIndex == "undefined" ? (
+				<Skeleton w={200} h={200} />
+			) : (
+				<Card maxW="sm">
+					<CardBody>
+						<Stack mt="6" spacing="3">
+							<Skeleton h="150px" w="300px"></Skeleton>
+							<Heading size="md">{projectInfo[0]}</Heading>
+							<SkeletonText></SkeletonText>
+						</Stack>
+					</CardBody>
+					<Divider />
+					<CardFooter>
+						<Stack spacing="3" w="100%">
+							<Progress
+								hasStripe
+								value={Number(projectInfo[2]) / Number(projectInfo[1])}
+							/>
+							<Flex justify="space-between">
+								<Text color="blue.600" fontSize="2xl">
+									Ends at block {Number(projectInfo[3])} block in{" "}
+									{Number(projectInfo[3]) - Number(currentBlock)}
+								</Text>
+								<Link href={`/v2/projects/${projectIndex}`}>
+									<Button>See</Button>
+								</Link>
+							</Flex>
+						</Stack>
+					</CardFooter>
+				</Card>
+			)}
+		</>
 	);
 };
 
