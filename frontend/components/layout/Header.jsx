@@ -7,11 +7,11 @@ const Header = () => {
 		<Flex justifyContent="space-between" alignItems="center" p="2rem">
 			<Link href="/">Logo</Link>
 			<Link href="/staking">Staking</Link>
-			<Link href="/contributeur">Contributeur</Link>
-			<Link href="/association">Association</Link>
-			<Link href="/adherent">Adherent</Link>
-			<Link href="/projects">Project List</Link>
-			<Link href="/profil">Profil</Link>
+			<Link href="/v2/contributeur">Contributeur</Link>
+			<Link href="/v2/association">Association</Link>
+			<Link href="/v2/adherent">Adherent</Link>
+			<Link href="/v2/projects">Project List</Link>
+			<Link href="/v2/profil">Profil</Link>
 			<ConnectButton showBalance={false} />
 		</Flex>
 	);
