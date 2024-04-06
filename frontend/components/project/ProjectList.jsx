@@ -65,7 +65,7 @@ const ProjectList = () => {
 		<>
 			<Heading>ProjectList</Heading>
 			<Link href="/projects/create">add project</Link>
-			<Grid templateColumns="repeat(4, 1fr)" gap={6}>
+			<Grid templateColumns="repeat(3, 1fr)" gap={6}>
 				{projects.map((project) => (
 					<GridItem key={project.id}>
 						<ProjectCard project={project} />

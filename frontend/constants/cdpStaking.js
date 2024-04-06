@@ -36,6 +36,42 @@ export const cdpStakingAbi = [
 		type: "error",
 	},
 	{
+		inputs: [
+			{
+				internalType: "address",
+				name: "",
+				type: "address",
+			},
+		],
+		name: "poolAlreadyExist",
+		type: "error",
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{
+				indexed: false,
+				internalType: "address",
+				name: "_account",
+				type: "address",
+			},
+			{
+				indexed: false,
+				internalType: "address",
+				name: "_token",
+				type: "address",
+			},
+			{
+				indexed: false,
+				internalType: "uint256",
+				name: "weight",
+				type: "uint256",
+			},
+		],
+		name: "CreatePool",
+		type: "event",
+	},
+	{
 		anonymous: false,
 		inputs: [
 			{
@@ -169,6 +205,11 @@ export const cdpStakingAbi = [
 	},
 	{
 		inputs: [
+			{
+				internalType: "uint256",
+				name: "",
+				type: "uint256",
+			},
 			{
 				internalType: "address",
 				name: "",

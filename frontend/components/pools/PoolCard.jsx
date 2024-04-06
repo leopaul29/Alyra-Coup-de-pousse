@@ -1,17 +1,20 @@
 import { cdpStakingAbi, cdpStakingAddress } from "@/constants/cdpStaking";
-import { Box, Heading, Stack } from "@chakra-ui/react";
+import { Box, Button, Heading, Skeleton, Stack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { readContract } from "viem/actions";
 import { useAccount } from "wagmi";
 import { publicClient } from "@/utils/client";
 import { erc20Abi } from "viem";
+import Link from "next/link";
 
-const PoolInfo = ({ poolIndex }) => {
+const PoolCard = ({ poolIndex }) => {
 	const { address } = useAccount();
 	const [poolInfo, setPoolInfo] = useState({});
 	const [balanceOfUserToken, setBlanceOfUserToken] = useState({});
-	const [blanceOfDappToken, setBlanceOfDappToken] = useState({});
-	const [name, setName] = useState("");
+
+	const [balanceUserOnDapp, setBalanceUserOnDapp] = useState();
+	const [name, setName] = useState();
+	const [reward, setReward] = useState();
 
 	const getPoolInfo = async () => {
 		const poolInfo = await readContract(publicClient, {
@@ -34,17 +37,19 @@ const PoolInfo = ({ poolIndex }) => {
 				args: [address],
 			});
 			setBlanceOfUserToken(balanceOfUser);
-			const balanceOfDapp = await readContract(publicClient, {
-				...ERC20Contract,
-				functionName: "balanceOf",
-				args: [cdpStakingAddress],
-			});
-			setBlanceOfDappToken(balanceOfDapp);
 			const erc20Name = await readContract(publicClient, {
 				...ERC20Contract,
 				functionName: "name",
 			});
 			setName(erc20Name);
+			const userInfo = await readContract(publicClient, {
+				address: cdpStakingAddress,
+				abi: cdpStakingAbi,
+				functionName: "userInfo",
+				args: [poolIndex, address],
+			});
+			setBalanceUserOnDapp(Number(userInfo[0]));
+			setReward(Number(userInfo[2] ? userInfo[2] : 0));
 		}
 	};
 
@@ -59,15 +64,18 @@ const PoolInfo = ({ poolIndex }) => {
 	return (
 		<>
 			{poolIndex == "undefined" ? (
-				<div>loading</div>
+				<Skeleton w={200} h={200} />
 			) : (
 				<div>
-					<Heading>pool {name}</Heading>
+					<Heading>{name}</Heading>
 					<Stack>
-						<Box>address token: {poolInfo[0]}</Box>
 						<Box>weight: {Number(poolInfo[1])}</Box>
 						<Box>balanceOfUser: {Number(balanceOfUserToken)}</Box>
-						<Box>blanceOfDappToken: {Number(blanceOfDappToken)}</Box>
+						<Box>balanceUserOnDapp: {balanceUserOnDapp}</Box>
+						<Box>reward: {reward}</Box>
+						<Button>
+							<Link href={`/staking/${poolIndex}`}>Go to pool</Link>
+						</Button>
 					</Stack>
 				</div>
 			)}
@@ -75,4 +83,4 @@ const PoolInfo = ({ poolIndex }) => {
 	);
 };
 
-export default PoolInfo;
+export default PoolCard;

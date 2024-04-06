@@ -28,7 +28,6 @@ error poolAlreadyExist(address);
 contract CDPStaking is Ownable(msg.sender) {
     // VARIABLES
     CoupDePousseToken private rewardToken;
-    uint256 totalSupply;
 
     PoolInfo[] public poolInfo;
     struct PoolInfo {
@@ -51,15 +50,13 @@ contract CDPStaking is Ownable(msg.sender) {
     }
     
     // MODIFIERS
-    modifier updateReward(uint256 _pid, address _account) {
-        if (totalSupply != 0) {
+    modifier updateReward(uint256 _pid) {
             // get count of CDP token for a pool
             PoolInfo memory pool = poolInfo[_pid];
             UserInfo storage user = userInfo[_pid][msg.sender];
             uint256 nbBlock = block.number - user.blockStart;
             // update nb reward total in rewards mapping
             user.rewards += nbBlock * pool.weight;
-        }
         _;
     }
 
@@ -84,10 +81,9 @@ contract CDPStaking is Ownable(msg.sender) {
          emit CreatePool(msg.sender,address(_token),_weight);
     }
 
-    function stake(uint256 _pid, uint256 _amount) external updateReward(_pid, msg.sender) {
+    function stake(uint256 _pid, uint256 _amount) external updateReward(_pid) {
         require(_amount > 0, "_amount = 0");
         PoolInfo memory pool = poolInfo[_pid];
-        totalSupply += _amount * pool.weight; // = balance contract
         
         UserInfo storage user = userInfo[_pid][msg.sender];
         user.lpToken += _amount * pool.weight; // = balance user
@@ -97,11 +93,10 @@ contract CDPStaking is Ownable(msg.sender) {
         //event stake
     }
 
-    function withdraw(uint256 _pid, uint256 _amount) external updateReward(_pid, msg.sender) {
+    function unstake(uint256 _pid, uint256 _amount) external updateReward(_pid) {
         // faire un withdraw all only pour ne pas avoir de residu
         require(_amount > 0, "amount = 0");
         PoolInfo memory pool = poolInfo[_pid];
-        totalSupply -= _amount * pool.weight; // = balance contract
         
         UserInfo storage user = userInfo[_pid][msg.sender];
         user.lpToken -= _amount * pool.weight; // = balance user

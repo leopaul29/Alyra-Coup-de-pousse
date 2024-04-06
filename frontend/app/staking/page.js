@@ -1,5 +1,5 @@
 "use client";
-import Staking from "@/components/Staking";
+import PoolList from "@/components/pools/PoolList";
 import NotConnected from "@/components/layout/NotConnected";
 
 import { useAccount } from "wagmi";
@@ -7,5 +7,5 @@ import { useAccount } from "wagmi";
 export default function Page() {
 	const { isConnected } = useAccount();
 
-	return <>{isConnected ? <Staking /> : <NotConnected />}</>;
+	return <>{isConnected ? <PoolList /> : <NotConnected />}</>;
 }

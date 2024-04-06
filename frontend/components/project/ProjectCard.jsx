@@ -29,7 +29,7 @@ const ProjectCard = ({ project }) => {
 						<Text color="blue.600" fontSize="2xl">
 							Ends in X block
 						</Text>
-						<Link href={`/projects/${project.slug}`}>
+						<Link href={`/v2/projects/${project.slug}`}>
 							<Button>See</Button>
 						</Link>
 					</Flex>
