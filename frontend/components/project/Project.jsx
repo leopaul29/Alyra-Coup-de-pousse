@@ -1,7 +1,6 @@
 import {
 	Heading,
 	Stack,
-	HStack,
 	Progress,
 	Link,
 	Box,
@@ -10,8 +9,6 @@ import {
 	GridItem,
 } from "@chakra-ui/react";
 import { Skeleton, SkeletonCircle, SkeletonText } from "@chakra-ui/react";
-import { Card, CardBody, CardFooter } from "@chakra-ui/react";
-import { Button } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { readContract } from "viem/actions";
 import { cdpProjectAddress, cdpProjectAbi } from "@/constants/cdpProject";

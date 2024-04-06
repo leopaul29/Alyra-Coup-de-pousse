@@ -154,12 +154,12 @@ const PoolDeposit = ({ poolIndex, poolInfo, refetch }) => {
 
 	return (
 		<Box mb="1rem">
-			{/* <TransacAlert
+			<TransacAlert
 				hash={hashstake}
 				isConfirming={isConfirmingStake}
 				isConfirmed={isConfirmedStake}
 				error={error}
-			/> */}
+			/>
 			<Flex>
 				<Input
 					placeholder="Amount in ETH"

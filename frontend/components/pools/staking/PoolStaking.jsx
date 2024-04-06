@@ -1,11 +1,11 @@
-import { Box, Button, Heading, Stack } from "@chakra-ui/react";
+import { Box, Heading, Stack } from "@chakra-ui/react";
 import PoolDeposit from "./PoolDeposit";
 import PoolWithdraw from "./PoolWithdraw";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { readContract } from "viem/actions";
 import { publicClient } from "@/utils/client";
 import { cdpStakingAbi, cdpStakingAddress } from "@/constants/cdpStaking";
-import { useAccount, useReadContract } from "wagmi";
+import { useAccount } from "wagmi";
 import { erc20Abi, isAddress } from "viem";
 
 const PoolStaking = ({ poolIndex }) => {
