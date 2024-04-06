@@ -1,20 +1,19 @@
 import { cdpStakingAbi, cdpStakingAddress } from "@/constants/cdpStaking";
-import { cdpTokenAbi, cpdTokenAddress } from "@/constants/cdpToken";
-import { usdcTokenAbi, usdcTokenAddress } from "@/constants/uscdToken";
 import { Box, Heading, Stack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { readContract } from "viem/actions";
-import { useReadContract, useAccount } from "wagmi";
+import { useAccount } from "wagmi";
 import { publicClient } from "@/utils/client";
+import { erc20Abi } from "viem";
 
 const PoolInfo = ({ poolIndex }) => {
-	console.log("poolIndex:", poolIndex);
 	const { address } = useAccount();
 	const [poolInfo, setPoolInfo] = useState({});
-	// const [balanceOfUserToken, setBlanceOfUserToken] = useState({});
+	const [balanceOfUserToken, setBlanceOfUserToken] = useState({});
+	const [blanceOfDappToken, setBlanceOfDappToken] = useState({});
+	const [name, setName] = useState("");
 
 	const getPoolInfo = async () => {
-		console.log("poolInfo readcontract");
 		const poolInfo = await readContract(publicClient, {
 			address: cdpStakingAddress,
 			abi: cdpStakingAbi,
@@ -23,64 +22,56 @@ const PoolInfo = ({ poolIndex }) => {
 			args: [poolIndex],
 		});
 		setPoolInfo(poolInfo);
-		let balanceOfUserToken;
 		if (poolInfo) {
-			console.log("pool", poolInfo);
-			console.log("pool.token", poolInfo[0]);
-			console.log("pool.weight", poolInfo[1]);
-
-			// let contractAddress, contractAbi;
-			// if (poolInfo[0] === usdcTokenAddress) {
-			// 	contractAddress = usdcTokenAddress;
-			// 	contractAbi = usdcTokenAbi;
-			// }
-			// if (poolIndex[0] === cpdTokenAddress) {
-			// 	contractAddress = cpdTokenAddress;
-			// 	contractAbi = cdpTokenAbi;
-			// }
-			// if (contractAddress !== "") {
-			// 	// const { data: balanceOfUser } = useReadContract({
-			// 	// 	address: contractAddress,
-			// 	// 	abi: contractAbi,
-			// 	// 	functionName: "balanceOf",
-			// 	// 	account: address,
-			// 	// 	args: [address],
-			// 	// });
-			// 	const balanceOf = await readContract(client, {
-			// 		abi: contractAbi,
-			// 		address: contractAddress,
-			// 		functionName: "balanceOf",
-			// 	});
-			// 	setBlanceOfUserToken(balanceOfUser);
-			// }
+			const ERC20Contract = {
+				address: poolInfo[0],
+				abi: erc20Abi,
+				account: address,
+			};
+			const balanceOfUser = await readContract(publicClient, {
+				...ERC20Contract,
+				functionName: "balanceOf",
+				args: [address],
+			});
+			setBlanceOfUserToken(balanceOfUser);
+			const balanceOfDapp = await readContract(publicClient, {
+				...ERC20Contract,
+				functionName: "balanceOf",
+				args: [cdpStakingAddress],
+			});
+			setBlanceOfDappToken(balanceOfDapp);
+			const erc20Name = await readContract(publicClient, {
+				...ERC20Contract,
+				functionName: "name",
+			});
+			setName(erc20Name);
 		}
 	};
 
 	useEffect(() => {
-		console.log("useeffect");
-
-		const getAllPoolInfo = async () => {
-			console.log("getAllPoolInfo");
-
+		const getPoolInfoAsync = async () => {
 			if (poolIndex !== "undefined") {
 				await getPoolInfo();
 			}
 		};
-		getAllPoolInfo();
+		getPoolInfoAsync();
 	}, []);
 	return (
-		<div>
-			<Heading>pool: {poolIndex}</Heading>
-			<Stack>
-				{poolInfo && (
-					<>
+		<>
+			{poolIndex == "undefined" ? (
+				<div>loading</div>
+			) : (
+				<div>
+					<Heading>pool {name}</Heading>
+					<Stack>
 						<Box>address token: {poolInfo[0]}</Box>
 						<Box>weight: {Number(poolInfo[1])}</Box>
-						{/* <Box>balanceOfUser: {Number(balanceOfUserToken)}</Box> */}
-					</>
-				)}
-			</Stack>
-		</div>
+						<Box>balanceOfUser: {Number(balanceOfUserToken)}</Box>
+						<Box>blanceOfDappToken: {Number(blanceOfDappToken)}</Box>
+					</Stack>
+				</div>
+			)}
+		</>
 	);
 };
 

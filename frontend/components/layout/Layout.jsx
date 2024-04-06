@@ -12,9 +12,8 @@ const Layout = ({ children }) => {
 				p="2rem"
 				direction="column"
 				m="auto"
+				mx="100px"
 				minW="100vh"
-				mr="200px"
-				ml="200px"
 			>
 				{children}
 			</Flex>
