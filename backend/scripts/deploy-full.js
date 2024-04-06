@@ -25,6 +25,8 @@ async function main() {
 	const cdpProject = await ethers.deployContract("CDPProject");
 	await cdpProject.waitForDeployment();
 	console.log(`cdpProject contract deployed to ${cdpProject.target}`);
+
+	await cdpStaking.setCDPProjectAddress(cdpProject.target);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

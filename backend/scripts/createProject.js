@@ -8,8 +8,8 @@ async function main() {
 
 	[owner, asso1, adh1, adh2, adh3] = await ethers.getSigners();
 	// create 2 projects
-	await cdpProject.connect(asso1).createProject("new project 1", 100, 50);
-	await cdpProject.connect(asso1).createProject("new project 2", 10, 200);
+	await cdpProject.connect(asso1).createProject("new project 1");
+	await cdpProject.connect(asso1).createProject("new project 2");
 	console.log(`cdpProject projects created`);
 	// add 3 adherents project 0
 	await cdpProject.connect(asso1).addAdherent(0, adh1);

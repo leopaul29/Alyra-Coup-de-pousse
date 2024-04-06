@@ -1,12 +1,12 @@
 import {
 	Heading,
 	Stack,
-	Progress,
 	Link,
 	Box,
 	Flex,
 	Grid,
 	GridItem,
+	Text,
 } from "@chakra-ui/react";
 import { Skeleton, SkeletonCircle, SkeletonText } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
@@ -14,6 +14,7 @@ import { readContract } from "viem/actions";
 import { cdpProjectAddress, cdpProjectAbi } from "@/constants/cdpProject";
 import { useAccount } from "wagmi";
 import { publicClient } from "@/utils/client";
+import { shortenAddress } from "@/utils/utilsFunctions";
 
 const Project = ({ projectIndex }) => {
 	const { address } = useAccount();
@@ -21,7 +22,6 @@ const Project = ({ projectIndex }) => {
 	const [projectAdherents, setProjectAdherents] = useState([]);
 	const [currentBlock, setCurrentCBlock] = useState();
 	const getProjectInfo = async () => {
-		console.log("projectIndex", projectIndex);
 		setCurrentCBlock(await publicClient.getBlockNumber());
 		if (projectIndex) {
 			const projectInfo = await readContract(publicClient, {
@@ -40,7 +40,6 @@ const Project = ({ projectIndex }) => {
 				args: [projectIndex],
 			});
 			setProjectAdherents(projectAdherents);
-			console.log("projectAdherents", projectAdherents);
 		}
 	};
 	useEffect(() => {
@@ -71,7 +70,7 @@ const Project = ({ projectIndex }) => {
 									skeletonHeight="4"
 									mb="12"
 								/>
-								<Heading mb={4} size="md">
+								{/* <Heading mb={4} size="md">
 									Progress
 								</Heading>
 								<Progress
@@ -82,16 +81,17 @@ const Project = ({ projectIndex }) => {
 								<Heading mb={4} size="md">
 									Deadline (block nb{projectInfo.endBlock})
 								</Heading>
-								Ends at block {Number(projectInfo[3])} block in{" "}
-								{Number(projectInfo[3]) - Number(currentBlock)}{" "}
+								Ends in {Number(projectInfo[3]) - Number(currentBlock)} block
+								(at block {Number(projectInfo[3])}) */}
 							</Box>
 						</Flex>
 						{projectAdherents.length > 0 ? (
 							<Grid templateColumns="repeat(8, 1fr)" gap={6}>
 								{projectAdherents.map((adherentAddress) => (
 									<GridItem key={crypto.randomUUID()}>
-										<Link href={`/adherents/${adherentAddress}`}>
-											<SkeletonCircle size={16} />
+										<Link>
+											<SkeletonCircle size={16} mb={4} />
+											<Text>{shortenAddress(adherentAddress)}</Text>
 										</Link>
 									</GridItem>
 								))}

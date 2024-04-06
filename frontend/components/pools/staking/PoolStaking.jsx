@@ -14,7 +14,7 @@ const PoolStaking = ({ poolIndex }) => {
 	const [balanceUser, setBalanceUser] = useState();
 	const [balanceUserOnDapp, setBalanceUserOnDapp] = useState();
 	const [name, setName] = useState();
-	const [reward, setReward] = useState();
+	const [totalSupply, setTotalSupply] = useState();
 
 	const getPoolInfo = async () => {
 		const poolInfo = await readContract(publicClient, {
@@ -25,6 +25,7 @@ const PoolStaking = ({ poolIndex }) => {
 		});
 		setPoolInfo(poolInfo);
 		if (poolInfo) {
+			setTotalSupply(Number(poolInfo[1]));
 			const erc20Name = await readContract(publicClient, {
 				address: poolInfo[0],
 				abi: erc20Abi,
@@ -47,14 +48,13 @@ const PoolStaking = ({ poolIndex }) => {
 	};
 	const refetchUserOnBalanceDapp = async () => {
 		if (isAddress(poolInfo[0])) {
-			const userInfo = await readContract(publicClient, {
+			const balanceUserOnDapp = await readContract(publicClient, {
 				address: cdpStakingAddress,
 				abi: cdpStakingAbi,
 				functionName: "userInfo",
 				args: [poolIndex, address],
 			});
-			setBalanceUserOnDapp(userInfo[0]);
-			setReward(userInfo[2] ? userInfo[2] : 0);
+			setBalanceUserOnDapp(balanceUserOnDapp);
 		}
 	};
 	const refetch = () => {
@@ -84,7 +84,7 @@ const PoolStaking = ({ poolIndex }) => {
 					<Stack>
 						<Box>balanceUser: {Number(balanceUser)}</Box>
 						<Box>balanceUserOnDapp: {Number(balanceUserOnDapp)}</Box>
-						<Box>reward: {Number(reward)}</Box>
+						<Box>totalSupply: {totalSupply}</Box>
 						<PoolDeposit
 							poolIndex={poolIndex}
 							poolInfo={poolInfo}

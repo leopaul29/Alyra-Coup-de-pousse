@@ -2,7 +2,7 @@ import TransacAlert from "../../TransacAlert";
 import { useState, useEffect } from "react";
 import { Flex, Box, Button, Input, useToast } from "@chakra-ui/react";
 import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
-import { erc20Abi, getAddress, isAddress } from "viem";
+import { isAddress } from "viem";
 import { cdpStakingAbi, cdpStakingAddress } from "@/constants/cdpStaking";
 
 const PoolWithdraw = ({ poolIndex, poolInfo, refetch }) => {

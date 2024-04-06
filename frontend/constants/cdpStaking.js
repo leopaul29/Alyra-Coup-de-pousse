@@ -9,6 +9,11 @@ export const cdpStakingAbi = [
 				name: "_rewardToken",
 				type: "address",
 			},
+			{
+				internalType: "address",
+				name: "_cdpProject",
+				type: "address",
+			},
 		],
 		stateMutability: "nonpayable",
 		type: "constructor",
@@ -91,6 +96,39 @@ export const cdpStakingAbi = [
 		type: "event",
 	},
 	{
+		inputs: [],
+		name: "claimReward",
+		outputs: [],
+		stateMutability: "nonpayable",
+		type: "function",
+	},
+	{
+		inputs: [],
+		name: "computeCumulateReward",
+		outputs: [
+			{
+				internalType: "uint256",
+				name: "",
+				type: "uint256",
+			},
+		],
+		stateMutability: "view",
+		type: "function",
+	},
+	{
+		inputs: [],
+		name: "computeRewardPerBlock",
+		outputs: [
+			{
+				internalType: "uint256",
+				name: "",
+				type: "uint256",
+			},
+		],
+		stateMutability: "view",
+		type: "function",
+	},
+	{
 		inputs: [
 			{
 				internalType: "contract IERC20",
@@ -104,13 +142,6 @@ export const cdpStakingAbi = [
 			},
 		],
 		name: "createPool",
-		outputs: [],
-		stateMutability: "nonpayable",
-		type: "function",
-	},
-	{
-		inputs: [],
-		name: "getReward",
 		outputs: [],
 		stateMutability: "nonpayable",
 		type: "function",
@@ -145,6 +176,11 @@ export const cdpStakingAbi = [
 			},
 			{
 				internalType: "uint256",
+				name: "totalSupply",
+				type: "uint256",
+			},
+			{
+				internalType: "uint256",
 				name: "weight",
 				type: "uint256",
 			},
@@ -170,6 +206,25 @@ export const cdpStakingAbi = [
 		name: "renounceOwnership",
 		outputs: [],
 		stateMutability: "nonpayable",
+		type: "function",
+	},
+	{
+		inputs: [
+			{
+				internalType: "address",
+				name: "",
+				type: "address",
+			},
+		],
+		name: "rewards",
+		outputs: [
+			{
+				internalType: "uint256",
+				name: "",
+				type: "uint256",
+			},
+		],
+		stateMutability: "view",
 		type: "function",
 	},
 	{
@@ -220,17 +275,7 @@ export const cdpStakingAbi = [
 		outputs: [
 			{
 				internalType: "uint256",
-				name: "lpToken",
-				type: "uint256",
-			},
-			{
-				internalType: "uint256",
-				name: "blockStart",
-				type: "uint256",
-			},
-			{
-				internalType: "uint256",
-				name: "rewards",
+				name: "",
 				type: "uint256",
 			},
 		],

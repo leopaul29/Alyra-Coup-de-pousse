@@ -27,31 +27,8 @@ export const cdpProjectAbi = [
 				name: "_title",
 				type: "string",
 			},
-			{
-				internalType: "uint256",
-				name: "_minAmountToRaise",
-				type: "uint256",
-			},
-			{
-				internalType: "uint256",
-				name: "_endBlockNumber",
-				type: "uint256",
-			},
 		],
 		name: "createProject",
-		outputs: [],
-		stateMutability: "nonpayable",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "uint256",
-				name: "_pid",
-				type: "uint256",
-			},
-		],
-		name: "finishProject",
 		outputs: [],
 		stateMutability: "nonpayable",
 		type: "function",
@@ -79,25 +56,6 @@ export const cdpProjectAbi = [
 		inputs: [
 			{
 				internalType: "uint256",
-				name: "_pid",
-				type: "uint256",
-			},
-		],
-		name: "projectAmountRaised",
-		outputs: [
-			{
-				internalType: "uint256",
-				name: "",
-				type: "uint256",
-			},
-		],
-		stateMutability: "view",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "uint256",
 				name: "",
 				type: "uint256",
 			},
@@ -108,26 +66,6 @@ export const cdpProjectAbi = [
 				internalType: "string",
 				name: "title",
 				type: "string",
-			},
-			{
-				internalType: "uint256",
-				name: "minAmountToRaise",
-				type: "uint256",
-			},
-			{
-				internalType: "uint256",
-				name: "amountRaised",
-				type: "uint256",
-			},
-			{
-				internalType: "uint256",
-				name: "endBlockNumber",
-				type: "uint256",
-			},
-			{
-				internalType: "bool",
-				name: "finished",
-				type: "bool",
 			},
 			{
 				internalType: "address",
@@ -149,24 +87,6 @@ export const cdpProjectAbi = [
 			},
 		],
 		stateMutability: "view",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "uint256",
-				name: "_pid",
-				type: "uint256",
-			},
-			{
-				internalType: "address",
-				name: "_adherent",
-				type: "address",
-			},
-		],
-		name: "removeAdherent",
-		outputs: [],
-		stateMutability: "nonpayable",
 		type: "function",
 	},
 ];

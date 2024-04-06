@@ -1,13 +1,5 @@
 import { publicClient } from "@/utils/client";
-import {
-	Heading,
-	Link,
-	Stack,
-	Flex,
-	Text,
-	Divider,
-	Progress,
-} from "@chakra-ui/react";
+import { Heading, Link, Stack, Flex, Divider } from "@chakra-ui/react";
 import { Card, CardBody, CardFooter } from "@chakra-ui/react";
 import { Skeleton, SkeletonText } from "@chakra-ui/react";
 import { Button } from "@chakra-ui/react";
@@ -30,7 +22,6 @@ const ProjectCard = ({ projectIndex }) => {
 			args: [projectIndex],
 		});
 		setProjectInfo(projectInfo);
-		console.log("projectInfo", projectInfo);
 	};
 	useEffect(() => {
 		const getProjectInfoAsync = async () => {
@@ -56,16 +47,16 @@ const ProjectCard = ({ projectIndex }) => {
 					<Divider />
 					<CardFooter>
 						<Stack spacing="3" w="100%">
-							<Progress
+							{/* <Progress
 								hasStripe
 								value={Number(projectInfo[2]) / Number(projectInfo[1])}
-							/>
+							/> */}
 							<Flex justify="space-between">
-								<Text color="blue.600" fontSize="2xl">
+								{/* <Text color="blue.600" fontSize="2xl">
 									Ends at block {Number(projectInfo[3])} block in{" "}
 									{Number(projectInfo[3]) - Number(currentBlock)}
-								</Text>
-								<Link href={`/v2/projects/${projectIndex}`}>
+								</Text> */}
+								<Link href={`/projects/${projectIndex}`}>
 									<Button>See</Button>
 								</Link>
 							</Flex>
