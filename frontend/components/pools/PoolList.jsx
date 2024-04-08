@@ -23,7 +23,7 @@ import { useEffect } from "react";
 import { erc20Abi } from "viem";
 import { getAmountFormated } from "@/utils/utilsFunctions";
 import {
-	cpdTokenAddress,
+	cdpTokenAddress,
 	scrtTokenAddress,
 	usdcTokenAddress,
 } from "@/constants";
@@ -55,7 +55,7 @@ const PoolList = () => {
 		args: [address],
 	});
 	const { data: balanceOfUserCDP, refetch } = useReadContract({
-		address: cpdTokenAddress,
+		address: cdpTokenAddress,
 		abi: erc20Abi,
 		account: address,
 		functionName: "balanceOf",

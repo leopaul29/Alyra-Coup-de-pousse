@@ -2,7 +2,7 @@ import { Box, Grid, GridItem, Heading } from "@chakra-ui/react";
 import ProjectCard from "./ProjectCard";
 import { cdpProjectAddress, cdpProjectAbi } from "@/constants/cdpProject";
 import { useReadContract } from "wagmi";
-import { cpdTokenAddress } from "@/constants";
+import { cdpTokenAddress } from "@/constants";
 import { erc20Abi } from "viem";
 import { getAmountFormated } from "@/utils/utilsFunctions";
 
@@ -14,7 +14,7 @@ const ProjectList = () => {
 	});
 
 	const { data: balanceOfProjectCDP } = useReadContract({
-		address: cpdTokenAddress,
+		address: cdpTokenAddress,
 		abi: erc20Abi,
 		functionName: "balanceOf",
 		args: [cdpProjectAddress],
