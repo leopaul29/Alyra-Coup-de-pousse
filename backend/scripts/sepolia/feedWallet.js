@@ -1,4 +1,9 @@
 const hre = require("hardhat");
+require("dotenv").config();
+
+const CDPTOKEN_ADDRESS = process.env.SEPOLIA_CDPTOKEN || "";
+const USDCTOKEN_ADDRESS = process.env.SEPOLIA_USDCTOKEN || "";
+const SCRTTOKEN_ADDRESS = process.env.SEPOLIA_SCRTTOKEN || "";
 
 async function main() {
 	// signers
@@ -6,26 +11,20 @@ async function main() {
 
 	// USDC
 	const usdcTokenName = "USDCToken";
-	const USDC_CONTRACT_ADDRESS = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0";
 	const usdcToken = await ethers.getContractAt(
 		usdcTokenName,
-		USDC_CONTRACT_ADDRESS
+		USDCTOKEN_ADDRESS
 	);
 
 	//cpdTokenName
 	const cpdTokenName = "CoupDePousseToken";
-	const CDP_CONTRACT_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
-	const cpdToken = await ethers.getContractAt(
-		cpdTokenName,
-		CDP_CONTRACT_ADDRESS
-	);
+	const cpdToken = await ethers.getContractAt(cpdTokenName, CDPTOKEN_ADDRESS);
 
 	// secretToken
 	const secretTokenName = "SecretToken";
-	const SCRT_CONTRACT_ADDRESS = "0xc5a5C42992dECbae36851359345FE25997F5C42d";
 	const secretToken = await ethers.getContractAt(
 		secretTokenName,
-		SCRT_CONTRACT_ADDRESS
+		SCRTTOKEN_ADDRESS
 	);
 
 	// mint

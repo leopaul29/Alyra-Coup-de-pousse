@@ -41,19 +41,21 @@ const PoolList = () => {
 		functionName: "computeRewardPerBlock",
 		account: address,
 	});
-	const { data: computeCumulateReward } = useReadContract({
-		address: cdpStakingAddress,
-		abi: cdpStakingAbi,
-		functionName: "computeCumulateReward",
-		account: address,
-	});
-	const { data: rewardsClaimable } = useReadContract({
-		address: cdpStakingAddress,
-		abi: cdpStakingAbi,
-		functionName: "rewards",
-		account: address,
-		args: [address],
-	});
+	const { data: computeCumulateReward, refetch: refetchComputeCumulateReward } =
+		useReadContract({
+			address: cdpStakingAddress,
+			abi: cdpStakingAbi,
+			functionName: "computeCumulateReward",
+			account: address,
+		});
+	const { data: rewardsClaimable, refetch: refetchRewardsClaimable } =
+		useReadContract({
+			address: cdpStakingAddress,
+			abi: cdpStakingAbi,
+			functionName: "rewards",
+			account: address,
+			args: [address],
+		});
 	const { data: balanceOfUserCDP, refetch } = useReadContract({
 		address: cdpTokenAddress,
 		abi: erc20Abi,
@@ -75,7 +77,6 @@ const PoolList = () => {
 		functionName: "balanceOf",
 		args: [address],
 	});
-	balanceOfUserCDP;
 
 	const toast = useToast();
 	const {
@@ -129,6 +130,8 @@ const PoolList = () => {
 	useEffect(() => {
 		if (isSuccess) {
 			refetch();
+			refetchComputeCumulateReward();
+			refetchRewardsClaimable();
 			toast({
 				title: "Votre claim a été inscrit dans la Blockchain",
 				status: "success",

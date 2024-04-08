@@ -1,9 +1,12 @@
 const hre = require("hardhat");
+require("dotenv").config();
+
+const CDPSTAKING_ADDRESS = process.env.LOCAL_CDPSTAKING || "";
 
 async function main() {
 	const cdpStaking = await ethers.getContractAt(
 		"CDPStaking",
-		"0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
+		CDPSTAKING_ADDRESS
 	);
 	console.log(`cdpStaking poolInfo length: ${Number(cdpStaking.poolLength())}`);
 	console.log(`cdpStaking total supply: ${cdpStaking.totalSupply}`);

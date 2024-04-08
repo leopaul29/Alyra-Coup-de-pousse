@@ -1,9 +1,12 @@
 const hre = require("hardhat");
+require("dotenv").config();
+
+const CDPPROJECT_ADDRESS = process.env.LOCAL_CDPPROJECT || "";
 
 async function main() {
 	const cdpProject = await ethers.getContractAt(
 		"CDPProject",
-		"0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"
+		CDPPROJECT_ADDRESS
 	);
 	console.log(
 		`cdpProject projects Length: ${Number(await cdpProject.projectLength())}`

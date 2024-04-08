@@ -1,14 +1,18 @@
 const hre = require("hardhat");
+require("dotenv").config();
+
+const CDPSTAKING_ADDRESS = process.env.SEPOLIA_CDPSTAKING || "";
+const CDPTOKEN_ADDRESS = process.env.SEPOLIA_CDPTOKEN || "";
 
 async function main() {
-	const interaceName = "CDPStaking";
-	const CONTRACT_ADDRESS = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
-	const cdpStaking = await ethers.getContractAt(interaceName, CONTRACT_ADDRESS);
+	const cdpStaking = await ethers.getContractAt(
+		"CDPStaking",
+		CDPSTAKING_ADDRESS
+	);
 
-	// deploy USDC token
 	const cdpERC20 = await ethers.getContractAt(
 		"CoupDePousseToken",
-		"0x5FbDB2315678afecb367f032d93F642f64180aa3"
+		CDPTOKEN_ADDRESS
 	);
 
 	await cdpStaking.createPool(cdpERC20, 1);

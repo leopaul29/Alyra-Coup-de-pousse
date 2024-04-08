@@ -28,7 +28,7 @@ async function main() {
 	// deploy SCRT token
 	const scrtERC20 = await ethers.deployContract("SecretToken");
 	await scrtERC20.waitForDeployment();
-	console.log(`USDCToken contract deployed to ${scrtERC20.target}`);
+	console.log(`SecretToken contract deployed to ${scrtERC20.target}`);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

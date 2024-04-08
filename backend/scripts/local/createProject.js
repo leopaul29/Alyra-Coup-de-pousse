@@ -1,8 +1,10 @@
 const hre = require("hardhat");
+require("dotenv").config();
 
+const CDPPROJECT_ADDRESS = process.env.LOCAL_CDPPROJECT || "";
 async function main() {
 	const interaceName = "CDPProject";
-	const CONTRACT_ADDRESS = "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9";
+	const CONTRACT_ADDRESS = CDPPROJECT_ADDRESS;
 
 	const cdpProject = await ethers.getContractAt(interaceName, CONTRACT_ADDRESS);
 

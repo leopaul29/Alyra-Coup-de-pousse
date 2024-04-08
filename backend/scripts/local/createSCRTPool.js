@@ -1,14 +1,19 @@
 const hre = require("hardhat");
+require("dotenv").config();
+
+const CDPSTAKING_ADDRESS = process.env.LOCAL_CDPSTAKING || "";
+const SCRTTOKEN_ADDRESS = process.env.LOCAL_SCRTTOKEN || "";
 
 async function main() {
-	const interaceName = "CDPStaking";
-	const CONTRACT_ADDRESS = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
-	const cdpStaking = await ethers.getContractAt(interaceName, CONTRACT_ADDRESS);
+	const cdpStaking = await ethers.getContractAt(
+		"CDPStaking",
+		CDPSTAKING_ADDRESS
+	);
 
 	// deploy USDC token
 	const scrtERC20 = await ethers.getContractAt(
 		"SecretToken",
-		"0xc5a5C42992dECbae36851359345FE25997F5C42d"
+		SCRTTOKEN_ADDRESS
 	);
 
 	await cdpStaking.createPool(scrtERC20, 1);

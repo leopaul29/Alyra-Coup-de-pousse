@@ -1,9 +1,11 @@
 const hre = require("hardhat");
+require("dotenv").config();
 
+const SEPOLIA_CDPPROJECT = process.env.SEPOLIA_CDPPROJECT || "";
 async function main() {
 	const cdpProject = await ethers.getContractAt(
 		"CDPProject",
-		"0x0b2A7222932729dCb4E0DFD1936791FCF3d2f5BB"
+		SEPOLIA_CDPPROJECT
 	);
 	console.log(
 		`cdpProject projects Length: ${Number(await cdpProject.projectLength())}`
