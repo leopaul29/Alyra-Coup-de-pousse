@@ -16,7 +16,7 @@ async function main() {
 		SCRTTOKEN_ADDRESS
 	);
 
-	await cdpStaking.createPool(scrtERC20, 1);
+	await cdpStaking.createPool(scrtERC20, 3);
 	console.log(`New pool with SecretToken deployed`);
 }
 

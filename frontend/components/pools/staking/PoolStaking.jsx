@@ -24,7 +24,10 @@ const PoolStaking = ({ poolIndex }) => {
 			functionName: "poolInfo",
 			args: [poolIndex],
 		});
-		setTotalSupply(Number(poolInfo[1]));
+		setPoolInfo(poolInfo);
+		if (poolInfo) {
+			setTotalSupply(Number(poolInfo[1]));
+		}
 	};
 
 	const getPoolInfo = async () => {
@@ -91,7 +94,7 @@ const PoolStaking = ({ poolIndex }) => {
 				<div>loading</div>
 			) : (
 				<div>
-					<Heading>Pool: {name}</Heading>
+					<Heading mb={4}>Pool: {name}</Heading>
 					<Stack>
 						<Box>balanceUser: {getAmountFormated(balanceUser)}</Box>
 						<Box>balanceUserOnDapp: {getAmountFormated(balanceUserOnDapp)}</Box>

@@ -153,7 +153,7 @@ const PoolDeposit = ({ poolIndex, poolInfo, refetch }) => {
 	}, [isConfirmedStake]);
 
 	return (
-		<Box mb="1rem">
+		<Box mb="1rem" w={300}>
 			<TransacAlert
 				hash={hashstake}
 				isConfirming={isConfirmingStake}

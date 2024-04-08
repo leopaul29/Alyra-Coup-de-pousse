@@ -83,7 +83,7 @@ const PoolWithdraw = ({ poolIndex, poolInfo, refetch, refetchBalancePool }) => {
 	}, [isConfirmed]);
 
 	return (
-		<Box mb="1rem">
+		<Box mb="1rem" w={300}>
 			<TransacAlert
 				hash={hash}
 				isConfirming={isConfirming}

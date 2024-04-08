@@ -24,7 +24,7 @@ const ProjectList = () => {
 		: Number(projectLength);
 	return (
 		<div>
-			<Heading mb={4}>Projects count:{projectLengthNb}</Heading>
+			<Heading mb={4}>Projects ({projectLengthNb})</Heading>
 			{!isNaN(Number(balanceOfProjectCDP)) && (
 				<Box>Reward shared:{getAmountFormated(balanceOfProjectCDP)}</Box>
 			)}

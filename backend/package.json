@@ -18,13 +18,15 @@
 		"scrtPool-se": "yarn hardhat run ./scripts/sepolia/createSCRTPool.js --network sepolia",
 		"cdpPool-ll": "yarn hardhat run ./scripts/local/createCDPPool.js --network localhost",
 		"cdpPool-se": "yarn hardhat run ./scripts/sepolia/createCDPPool.js --network sepolia",
+		"allPool-ll": "yarn hardhat run ./scripts/local/allPool.js --network localhost",
+		"allPool-se": "yarn hardhat run ./scripts/sepolia/allPool.js --network sepolia",
 		"project-ll": "yarn hardhat run ./scripts/local/createProject.js --network localhost",
 		"project-se": "yarn hardhat run ./scripts/sepolia/createProject-sepolia.js --network sepolia",
-		"monitor-pool-ll": "yarn hardhat run ./scripts/local/monitor.js --network localhost",
+		"monitor-pool-ll": "yarn hardhat run ./scripts/local/monitorPool.js --network localhost",
 		"monitor-pro-ll": "yarn hardhat run ./scripts/local/monitorProject.js --network localhost",
 		"monitor-pro-se": "yarn hardhat run ./scripts/sepolia/monitorProject-sepolia.js --network sepolia",
-		"feed-ll": "yarn hardhat run ./scripts/local/feedWallet.js --network sepolia",
-		"feed-se": "yarn hardhat run ./scripts/local/feedWallet.js --network localhost",
+		"feed-ll": "yarn hardhat run ./scripts/local/feedWallet.js --network localhost",
+		"feed-se": "yarn hardhat run ./scripts/local/feedWallet.js --network sepolia",
 		"mine": "yarn hardhat run ./scripts/local/mineblock.js --network localhost"
 	},
 	"dependencies": {

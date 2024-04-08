@@ -3,12 +3,12 @@ require("dotenv").config();
 
 const CDPPROJECT_ADDRESS = process.env.LOCAL_CDPPROJECT || "";
 async function main() {
-	const interaceName = "CDPProject";
-	const CONTRACT_ADDRESS = CDPPROJECT_ADDRESS;
+	const cdpProject = await ethers.getContractAt(
+		"CDPProject",
+		CDPPROJECT_ADDRESS
+	);
 
-	const cdpProject = await ethers.getContractAt(interaceName, CONTRACT_ADDRESS);
-
-	[owner, asso1, adh1, adh2, adh3] = await ethers.getSigners();
+	const [owner, asso1, adh1, adh2, adh3] = await ethers.getSigners();
 	// create 2 projects
 	await cdpProject.connect(asso1).createProject("new project 1");
 	await cdpProject.connect(asso1).createProject("new project 2");

@@ -9,8 +9,8 @@
 
 ## Video
 
-Lien vidéo (durée 3 min 07 sec, vous pouvez la regarder en 1.2x, cela vous fera donc 2 min 35sec :
-https://www.loom.com/share/0612121444484927a82d6c9ebe39d3eb
+Lien vidéo (durée 2 min 55)
+https://www.loom.com/share/c29c2e0411a740faa0dca0351573aefc?sid=972d58c4-4925-4b24-91b5-ee8e56cfb614
 
 Lien Déploiement: https://alyra-coup-de-pousse.vercel.app/
 
