@@ -6,6 +6,7 @@ import { getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { WagmiProvider } from "wagmi";
 import { hardhat } from "wagmi/chains";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { sepolia } from "@/utils/sepolia";
 
 const WALLETCONNECT_PROJECTID =
 	process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECTID || "";
@@ -13,7 +14,7 @@ const WALLETCONNECT_PROJECTID =
 const config = getDefaultConfig({
 	appName: "Alyra-Projet-Final",
 	projectId: WALLETCONNECT_PROJECTID,
-	chains: [hardhat],
+	chains: [sepolia],
 	ssr: true, // If your dApp uses server side rendering (SSR)
 });
 
