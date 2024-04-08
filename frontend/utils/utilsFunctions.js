@@ -1,3 +1,5 @@
+import { formatEther } from "viem";
+
 export function shortenAddress(address) {
 	if (address === undefined) return "undefined";
 
@@ -9,4 +11,9 @@ export function shortenAddress(address) {
 
 		return `${firstPart}...${lastPart}`;
 	}
+}
+
+export function getAmountFormated(number) {
+	if (isNaN(Number(number))) return 0;
+	return formatEther(BigInt(Number(number)));
 }

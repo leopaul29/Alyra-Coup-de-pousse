@@ -2,7 +2,9 @@ import { Box, Grid, GridItem, Heading } from "@chakra-ui/react";
 import ProjectCard from "./ProjectCard";
 import { cdpProjectAddress, cdpProjectAbi } from "@/constants/cdpProject";
 import { useReadContract } from "wagmi";
-import { cdpTokenAbi, cpdTokenAddress } from "@/constants/cdpToken";
+import { cpdTokenAddress } from "@/constants";
+import { erc20Abi } from "viem";
+import { getAmountFormated } from "@/utils/utilsFunctions";
 
 const ProjectList = () => {
 	const { data: projectLength } = useReadContract({
@@ -13,15 +15,18 @@ const ProjectList = () => {
 
 	const { data: balanceOfProjectCDP } = useReadContract({
 		address: cpdTokenAddress,
-		abi: cdpTokenAbi,
+		abi: erc20Abi,
 		functionName: "balanceOf",
 		args: [cdpProjectAddress],
 	});
+	const projectLengthNb = isNaN(Number(projectLength))
+		? 0
+		: Number(projectLength);
 	return (
 		<div>
-			<Heading mb={4}>Projects</Heading>
+			<Heading mb={4}>Projects count:{projectLengthNb}</Heading>
 			{!isNaN(Number(balanceOfProjectCDP)) && (
-				<Box>Reward shared:{Number(balanceOfProjectCDP)}</Box>
+				<Box>Reward shared:{getAmountFormated(balanceOfProjectCDP)}</Box>
 			)}
 			<Grid templateColumns="repeat(3, 1fr)" gap={6}>
 				{projectLength &&

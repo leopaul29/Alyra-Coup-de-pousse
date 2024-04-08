@@ -1,10 +1,21 @@
 import { cdpStakingAbi, cdpStakingAddress } from "@/constants/cdpStaking";
-import { Box, Button, Heading, Skeleton, Stack, Link } from "@chakra-ui/react";
+import {
+	Box,
+	Button,
+	Heading,
+	Skeleton,
+	Stack,
+	Link,
+	Card,
+	CardHeader,
+	CardBody,
+} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { readContract } from "viem/actions";
 import { useAccount } from "wagmi";
 import { publicClient } from "@/utils/client";
-import { erc20Abi } from "viem";
+import { erc20Abi, formatEther } from "viem";
+import { getAmountFormated } from "@/utils/utilsFunctions";
 
 const PoolCard = ({ poolIndex }) => {
 	const { address } = useAccount();
@@ -61,22 +72,32 @@ const PoolCard = ({ poolIndex }) => {
 	}, []);
 	return (
 		<>
-			{poolIndex == "undefined" ? (
-				<Skeleton w={200} h={200} />
-			) : (
-				<div>
-					<Heading>{name}</Heading>
-					<Stack>
-						<Box>weight: {Number(poolInfo[2])}</Box>
-						<Box>balanceOfUser: {Number(balanceOfUserToken)}</Box>
-						<Box>balanceUserOnDapp: {balanceUserOnDapp}</Box>
-						<Box>totalSupply: {totalSupply}</Box>
-						<Link href={`/staking/${poolIndex}`}>
-							<Button>Go to pool</Button>
-						</Link>
-					</Stack>
-				</div>
-			)}
+			<Card>
+				{poolIndex == "undefined" ? (
+					<Skeleton w={200} h={200} />
+				) : (
+					<>
+						<CardHeader>
+							<Heading size="lg">{name}</Heading>
+						</CardHeader>
+						<CardBody>
+							<Stack>
+								<Box>weight: {Number(poolInfo[2])}</Box>
+								<Box>
+									balanceOfUser: {getAmountFormated(balanceOfUserToken)}
+								</Box>
+								<Box>
+									balanceUserOnDapp: {getAmountFormated(balanceUserOnDapp)}
+								</Box>
+								<Box>totalSupply: {getAmountFormated(totalSupply)}</Box>
+								<Link href={`/staking/${poolIndex}`}>
+									<Button>Go to pool</Button>
+								</Link>
+							</Stack>
+						</CardBody>
+					</>
+				)}
+			</Card>
 		</>
 	);
 };

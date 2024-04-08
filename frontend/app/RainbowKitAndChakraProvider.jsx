@@ -14,7 +14,7 @@ const WALLETCONNECT_PROJECTID =
 const config = getDefaultConfig({
 	appName: "Alyra-Projet-Final",
 	projectId: WALLETCONNECT_PROJECTID,
-	chains: [sepolia],
+	chains: [hardhat],
 	ssr: true, // If your dApp uses server side rendering (SSR)
 });
 

@@ -4,12 +4,12 @@ import TransacAlert from "../../TransacAlert";
 import { useState, useEffect } from "react";
 import { Flex, Box, Button, Input, useToast } from "@chakra-ui/react";
 import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
-import { erc20Abi, getAddress, isAddress } from "viem";
+import { erc20Abi, getAddress, isAddress, parseEther } from "viem";
 
 const PoolDeposit = ({ poolIndex, poolInfo, refetch }) => {
 	const { address } = useAccount();
 
-	const [depositETH, setDepositETH] = useState("");
+	const [depositToken, setDepositToken] = useState("");
 
 	const toast = useToast();
 
@@ -27,7 +27,6 @@ const PoolDeposit = ({ poolIndex, poolInfo, refetch }) => {
 					duration: 3000,
 					isClosable: true,
 				});
-				stakeToken();
 			},
 			onError: (error) => {
 				toast({
@@ -66,35 +65,35 @@ const PoolDeposit = ({ poolIndex, poolInfo, refetch }) => {
 		},
 	});
 	const stakeToken = async () => {
-		if (!isNaN(depositETH)) {
+		if (!isNaN(depositToken) && isAddress(poolInfo[0])) {
 			writeContractStake({
 				address: cdpStakingAddress,
 				abi: cdpStakingAbi,
 				functionName: "stake",
-				args: [poolIndex, depositETH],
+				args: [poolIndex, parseEther(depositToken?.toString())],
 				account: address,
 			});
 		} else {
 			toast({
-				title: "FAUT RENTRER UN NOMBRE !!!",
+				title: "L'input n'est pas un nombre ou l'adresse du token est fausse",
 				status: "error",
 				duration: 3000,
 				isClosable: true,
 			});
 		}
 	};
-	const setTheDepositETH = async () => {
-		if (!isNaN(depositETH) && isAddress(poolInfo[0])) {
+	const setThedepositToken = async () => {
+		if (!isNaN(depositToken) && isAddress(poolInfo[0])) {
 			writeContractApprove({
 				address: getAddress(poolInfo[0]),
 				abi: erc20Abi,
 				functionName: "approve",
-				args: [cdpStakingAddress, depositETH],
+				args: [cdpStakingAddress, parseEther(depositToken?.toString())],
 				account: address,
 			});
 		} else {
 			toast({
-				title: "FAUT RENTRER UN NOMBRE !!!",
+				title: "L'input n'est pas un nombre ou l'adresse du token est fausse",
 				status: "error",
 				duration: 3000,
 				isClosable: true,
@@ -115,6 +114,7 @@ const PoolDeposit = ({ poolIndex, poolInfo, refetch }) => {
 				duration: 3000,
 				isClosable: true,
 			});
+			stakeToken();
 		}
 		if (error) {
 			toast({
@@ -140,7 +140,7 @@ const PoolDeposit = ({ poolIndex, poolInfo, refetch }) => {
 				duration: 3000,
 				isClosable: true,
 			});
-			setDepositETH("");
+			setDepositToken("");
 		}
 		if (error) {
 			toast({
@@ -162,12 +162,12 @@ const PoolDeposit = ({ poolIndex, poolInfo, refetch }) => {
 			/>
 			<Flex>
 				<Input
-					placeholder="Amount in ETH"
+					placeholder="Amount to stake"
 					type="number"
-					value={depositETH}
-					onChange={(e) => setDepositETH(e.target.value)}
+					value={depositToken}
+					onChange={(e) => setDepositToken(e.target.value)}
 				/>
-				<Button disabled={setIsPending} onClick={setTheDepositETH}>
+				<Button disabled={setIsPending} onClick={setThedepositToken}>
 					{setIsPending ? "Confirming..." : "Stake"}{" "}
 				</Button>
 			</Flex>

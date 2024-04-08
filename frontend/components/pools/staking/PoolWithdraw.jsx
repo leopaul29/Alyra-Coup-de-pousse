@@ -2,11 +2,11 @@ import TransacAlert from "../../TransacAlert";
 import { useState, useEffect } from "react";
 import { Flex, Box, Button, Input, useToast } from "@chakra-ui/react";
 import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
-import { isAddress } from "viem";
+import { isAddress, parseEther } from "viem";
 import { cdpStakingAbi, cdpStakingAddress } from "@/constants/cdpStaking";
 
-const PoolWithdraw = ({ poolIndex, poolInfo, refetch }) => {
-	const [withdrawETH, setWithdrawETH] = useState("");
+const PoolWithdraw = ({ poolIndex, poolInfo, refetch, refetchBalancePool }) => {
+	const [withdrawToken, setWithdrawToken] = useState("");
 
 	const toast = useToast();
 
@@ -38,16 +38,16 @@ const PoolWithdraw = ({ poolIndex, poolInfo, refetch }) => {
 	});
 
 	const setTheWithdraw = async () => {
-		if (!isNaN(withdrawETH) && isAddress(poolInfo[0])) {
+		if (!isNaN(withdrawToken) && isAddress(poolInfo[0])) {
 			writeContract({
 				address: cdpStakingAddress,
 				abi: cdpStakingAbi,
 				functionName: "withdraw",
-				args: [poolIndex, withdrawETH],
+				args: [poolIndex, parseEther(withdrawToken?.toString())],
 			});
 		} else {
 			toast({
-				title: "FAUT RENTRER UN NOMBRE !!!",
+				title: "L'input n'est pas un nombre ou l'adresse du token est fausse",
 				status: "error",
 				duration: 3000,
 				isClosable: true,
@@ -63,13 +63,14 @@ const PoolWithdraw = ({ poolIndex, poolInfo, refetch }) => {
 	useEffect(() => {
 		if (isConfirmed) {
 			refetch();
+			refetchBalancePool();
 			toast({
 				title: "Votre nombre a été inscrit dans la Blockchain",
 				status: "success",
 				duration: 3000,
 				isClosable: true,
 			});
-			setWithdrawETH("");
+			setWithdrawToken("");
 		}
 		if (error) {
 			toast({
@@ -83,12 +84,18 @@ const PoolWithdraw = ({ poolIndex, poolInfo, refetch }) => {
 
 	return (
 		<Box mb="1rem">
+			<TransacAlert
+				hash={hash}
+				isConfirming={isConfirming}
+				isConfirmed={isConfirmed}
+				error={error}
+			/>
 			<Flex>
 				<Input
-					placeholder="Amount in ETH"
+					placeholder="Amount to withdraw"
 					type="number"
-					value={withdrawETH}
-					onChange={(e) => setWithdrawETH(e.target.value)}
+					value={withdrawToken}
+					onChange={(e) => setWithdrawToken(e.target.value)}
 				/>
 				<Button disabled={setIsPending} onClick={setTheWithdraw}>
 					{setIsPending ? "Confirming..." : "Withdraw"}{" "}

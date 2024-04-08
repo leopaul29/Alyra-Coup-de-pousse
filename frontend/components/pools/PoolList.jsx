@@ -2,9 +2,14 @@ import { cdpStakingAbi, cdpStakingAddress } from "@/constants/cdpStaking";
 import {
 	Box,
 	Button,
+	Card,
+	CardBody,
+	CardHeader,
+	Flex,
 	Grid,
 	GridItem,
 	Heading,
+	Stack,
 	useToast,
 } from "@chakra-ui/react";
 import {
@@ -14,9 +19,14 @@ import {
 } from "wagmi";
 import PoolCard from "./PoolCard";
 import { useAccount } from "wagmi";
-import { cdpTokenAbi, cpdTokenAddress } from "@/constants/cdpToken";
-import { usdcTokenAbi, usdcTokenAddress } from "@/constants/uscdToken";
 import { useEffect } from "react";
+import { erc20Abi } from "viem";
+import { getAmountFormated } from "@/utils/utilsFunctions";
+import {
+	cpdTokenAddress,
+	scrtTokenAddress,
+	usdcTokenAddress,
+} from "@/constants";
 
 const PoolList = () => {
 	const { address } = useAccount();
@@ -46,18 +56,26 @@ const PoolList = () => {
 	});
 	const { data: balanceOfUserCDP, refetch } = useReadContract({
 		address: cpdTokenAddress,
-		abi: cdpTokenAbi,
+		abi: erc20Abi,
 		account: address,
 		functionName: "balanceOf",
 		args: [address],
 	});
 	const { data: balanceOfUserUSDC } = useReadContract({
 		address: usdcTokenAddress,
-		abi: usdcTokenAbi,
+		abi: erc20Abi,
 		account: address,
 		functionName: "balanceOf",
 		args: [address],
 	});
+	const { data: balanceOfUserSCRT } = useReadContract({
+		address: scrtTokenAddress,
+		abi: erc20Abi,
+		account: address,
+		functionName: "balanceOf",
+		args: [address],
+	});
+	balanceOfUserCDP;
 
 	const toast = useToast();
 	const {
@@ -95,7 +113,7 @@ const PoolList = () => {
 			});
 		} else {
 			toast({
-				title: "FAUT RENTRER UN NOMBRE !!!",
+				title: "Il n'y a pas de reward à récupérer pour le moment",
 				status: "error",
 				duration: 3000,
 				isClosable: true,
@@ -128,51 +146,61 @@ const PoolList = () => {
 		}
 	}, [isSuccess]);
 	return (
-		<div>
-			<Heading mb={4}>Pools</Heading>
-			<Box>
-				<Heading mb={4}>Reward</Heading>
-				<Box>
-					computeRewardPerBlock:{" "}
-					{!isNaN(Number(computeRewardPerBlock))
-						? Number(computeRewardPerBlock)
-						: 0}
-				</Box>
-				<Box>
-					computeCumulateReward:{" "}
-					{!isNaN(Number(computeCumulateReward))
-						? Number(computeCumulateReward)
-						: 0}
-				</Box>
-				<Box>
-					rewardsClaimable:{" "}
-					{!isNaN(Number(rewardsClaimable)) ? Number(rewardsClaimable) : 0}
-				</Box>
-				<Button onClick={claimReward}>Claim reward</Button>
-			</Box>
-			<Box>
-				<Heading mb={4}>User balance</Heading>
-				<Box>
-					balanceOfUserCDP:{" "}
-					{!isNaN(Number(balanceOfUserCDP)) ? Number(balanceOfUserCDP) : 0}
-				</Box>
-				<Box>
-					balanceOfUserUSDC:{" "}
-					{!isNaN(Number(balanceOfUserUSDC)) ? Number(balanceOfUserUSDC) : 0}
-				</Box>
-			</Box>
+		<>
+			<Flex justify="space-between" mb={4}>
+				<Card>
+					<CardHeader>
+						<Heading mb={4} size="lg">
+							Reward
+						</Heading>
+					</CardHeader>
+					<CardBody>
+						<Stack>
+							<Box>
+								computeRewardPerBlock:{" "}
+								{Number(getAmountFormated(computeRewardPerBlock))}
+							</Box>
+							<Box>
+								rewardsClaimable:{" "}
+								{Number(getAmountFormated(computeCumulateReward)) +
+									Number(getAmountFormated(rewardsClaimable))}
+							</Box>
+							<Button onClick={claimReward}>Claim reward</Button>
+						</Stack>
+					</CardBody>
+				</Card>
+				<Card>
+					<CardHeader>
+						<Heading mb={4} size="lg">
+							User balance
+						</Heading>
+					</CardHeader>
+					<CardBody>
+						<Stack>
+							<Box>balanceOfUserCDP:{getAmountFormated(balanceOfUserCDP)}</Box>
+							<Box>
+								balanceOfUserUSDC: {getAmountFormated(balanceOfUserUSDC)}
+							</Box>
+							<Box>
+								balanceOfUserSCRT: {getAmountFormated(balanceOfUserSCRT)}
+							</Box>
+						</Stack>
+					</CardBody>
+				</Card>
+			</Flex>
 			<Box>
 				<Heading mb={4}>Pool list ({Number(poolLength)})</Heading>
-				<Grid templateColumns="repeat(3, 1fr)" gap={6}>
-					{Number(poolLength) > 0 &&
-						[...Array(Number(poolLength))].map((e, poolIndex) => (
+				{Number(poolLength) > 0 && (
+					<Grid templateColumns="repeat(3, 1fr)" gap={6}>
+						{[...Array(Number(poolLength))].map((e, poolIndex) => (
 							<GridItem key={crypto.randomUUID()}>
 								<PoolCard poolIndex={Number(poolIndex)} />
 							</GridItem>
 						))}
-				</Grid>
+					</Grid>
+				)}
 			</Box>
-		</div>
+		</>
 	);
 };
 

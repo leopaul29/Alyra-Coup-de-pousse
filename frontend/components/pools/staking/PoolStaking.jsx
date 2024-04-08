@@ -6,7 +6,8 @@ import { readContract } from "viem/actions";
 import { publicClient } from "@/utils/client";
 import { cdpStakingAbi, cdpStakingAddress } from "@/constants/cdpStaking";
 import { useAccount } from "wagmi";
-import { erc20Abi, isAddress } from "viem";
+import { erc20Abi, formatEther, isAddress } from "viem";
+import { getAmountFormated } from "@/utils/utilsFunctions";
 
 const PoolStaking = ({ poolIndex }) => {
 	const { address } = useAccount();
@@ -15,6 +16,16 @@ const PoolStaking = ({ poolIndex }) => {
 	const [balanceUserOnDapp, setBalanceUserOnDapp] = useState();
 	const [name, setName] = useState();
 	const [totalSupply, setTotalSupply] = useState();
+
+	const refetchBalancePool = async () => {
+		const poolInfo = await readContract(publicClient, {
+			address: cdpStakingAddress,
+			abi: cdpStakingAbi,
+			functionName: "poolInfo",
+			args: [poolIndex],
+		});
+		setTotalSupply(Number(poolInfo[1]));
+	};
 
 	const getPoolInfo = async () => {
 		const poolInfo = await readContract(publicClient, {
@@ -82,9 +93,9 @@ const PoolStaking = ({ poolIndex }) => {
 				<div>
 					<Heading>Pool: {name}</Heading>
 					<Stack>
-						<Box>balanceUser: {Number(balanceUser)}</Box>
-						<Box>balanceUserOnDapp: {Number(balanceUserOnDapp)}</Box>
-						<Box>totalSupply: {totalSupply}</Box>
+						<Box>balanceUser: {getAmountFormated(balanceUser)}</Box>
+						<Box>balanceUserOnDapp: {getAmountFormated(balanceUserOnDapp)}</Box>
+						<Box>totalSupply: {getAmountFormated(totalSupply)}</Box>
 						<PoolDeposit
 							poolIndex={poolIndex}
 							poolInfo={poolInfo}
@@ -94,6 +105,7 @@ const PoolStaking = ({ poolIndex }) => {
 							poolIndex={poolIndex}
 							poolInfo={poolInfo}
 							refetch={refetch}
+							refetchBalancePool={refetchBalancePool}
 						/>
 					</Stack>
 				</div>
