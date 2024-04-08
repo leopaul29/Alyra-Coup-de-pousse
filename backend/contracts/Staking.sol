@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/utils/math/Math.sol";
 
 contract CoupDePousseToken is ERC20("Coup de pousse Token", "Cdp"), Ownable(msg.sender) {
     constructor() {
-        _mint(msg.sender, 1000);
+        _mint(msg.sender, 1000*1e18);
     }
     // used in faucet or script? else delete
     function mint(address _to, uint256 _amount) external /*onlyOwner*/{
@@ -17,7 +17,7 @@ contract CoupDePousseToken is ERC20("Coup de pousse Token", "Cdp"), Ownable(msg.
 }
 contract USDCToken is ERC20("USDC", "USDC"), Ownable(msg.sender) {
     constructor() {
-        _mint(msg.sender, 1000);
+        _mint(msg.sender, 1000*1e18);
     }
     // used in faucet or script? else delete
     function mint(address _to, uint256 _amount) external /*onlyOwner*/ {
@@ -26,7 +26,7 @@ contract USDCToken is ERC20("USDC", "USDC"), Ownable(msg.sender) {
 }
 contract SecretToken is ERC20("Secret", "SCRT"), Ownable(msg.sender) {
     constructor() {
-        _mint(msg.sender, 1000);
+        _mint(msg.sender, 1000*1e18);
     }
     // used in faucet or script? else delete
     function mint(address _to, uint256 _amount) external /*onlyOwner*/ {
@@ -63,7 +63,7 @@ contract CDPStaking is Ownable(msg.sender) {
         lastBlockUpdate = block.number;
         _;
     }
-    function claimReward() external  {
+    function claimReward() external updateReward() {
         uint256 userReward = rewards[msg.sender] / 2;
         uint256 projectReward = rewards[msg.sender] - userReward;
         rewardToken.mint(msg.sender, userReward);

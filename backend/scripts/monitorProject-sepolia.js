@@ -3,12 +3,12 @@ const hre = require("hardhat");
 async function main() {
 	const cdpProject = await ethers.getContractAt(
 		"CDPProject",
-		"0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"
+		"0x0b2A7222932729dCb4E0DFD1936791FCF3d2f5BB"
 	);
 	console.log(
 		`cdpProject projects Length: ${Number(await cdpProject.projectLength())}`
 	);
-	console.log(`cdpProject project 0: ${await cdpProject.projectInfo[0]}`);
+	console.log(`cdpProject project 0: ${await cdpProject.projectInfo()}`);
 	console.log(
 		`cdpProject project adherents: ${await cdpProject.projectAdherents(0)}`
 	);

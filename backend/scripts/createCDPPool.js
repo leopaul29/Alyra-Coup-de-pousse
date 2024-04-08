@@ -6,13 +6,13 @@ async function main() {
 	const cdpStaking = await ethers.getContractAt(interaceName, CONTRACT_ADDRESS);
 
 	// deploy USDC token
-	const scrtERC20 = await ethers.getContractAt(
-		"SecretToken",
-		"0xc5a5C42992dECbae36851359345FE25997F5C42d"
+	const cdpERC20 = await ethers.getContractAt(
+		"CoupDePousseToken",
+		"0x5FbDB2315678afecb367f032d93F642f64180aa3"
 	);
 
-	await cdpStaking.createPool(scrtERC20, 1);
-	console.log(`New pool with SecretToken deployed`);
+	await cdpStaking.createPool(cdpERC20, 1);
+	console.log(`New pool with CoupDePousseToken deployed`);
 }
 
 main().catch((error) => {

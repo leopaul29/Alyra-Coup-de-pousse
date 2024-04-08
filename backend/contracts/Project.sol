@@ -6,13 +6,18 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 contract CDPProject {
     // VARIABLES
     uint256 balanceTotal;
+    Project[] public projectInfo;
     struct Project {
         string title;
         address[] adherents;
         address owner;
     }
-
-    Project[] public projectInfo;
+    
+    // EVENTS
+    event CreateProject(address _account, string _title);  
+    event AddAdherent(uint _pid, address _adherent);
+    
+    // MODIFIERS
     modifier projectExist(uint256 _pid) {
         require(_pid<projectInfo.length,"project id does not exist");
         _;
@@ -23,6 +28,7 @@ contract CDPProject {
         _;
     }
 
+// FUNCTIONS
     function projectLength() external view returns (uint256) {
         return projectInfo.length;
     }
@@ -35,12 +41,12 @@ contract CDPProject {
             adherents:new address[](0),
             owner: msg.sender
         }));
-        // event createproject
+        emit CreateProject(msg.sender,_title);
     }
 
     function addAdherent(uint _pid, address _adherent) external  projectExistIsOwnerOngoing(_pid){
         address[] storage adherents = projectInfo[_pid].adherents;
         adherents.push(_adherent);
-        //event add adherent
+        emit AddAdherent(_pid,_adherent);
     }
 }
