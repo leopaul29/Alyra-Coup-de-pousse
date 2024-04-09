@@ -3,6 +3,9 @@ pragma solidity 0.8.24;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
+/// @title CDPProject
+/// @author Leo-paul MARTIN
+/// @dev contract to handle project listing
 contract CDPProject {
     // VARIABLES
     uint256 balanceTotal;
@@ -28,13 +31,18 @@ contract CDPProject {
         _;
     }
 
-// FUNCTIONS
+    // FUNCTIONS
+    /// @dev get project length
     function projectLength() external view returns (uint256) {
         return projectInfo.length;
     }
+    /// @dev get adherents of a project
+    /// @param _pid poolID
     function projectAdherents(uint256 _pid) external view projectExist(_pid) returns ( address[] memory){
         return projectInfo[_pid].adherents;
     }
+    /// @dev create a project
+    /// @param _title title of the project
     function createProject(string memory _title/*, uint _minAmountToRaise, uint256 _endBlockNumber*/) external {
         projectInfo.push(Project({
             title:_title,
@@ -44,6 +52,9 @@ contract CDPProject {
         emit CreateProject(msg.sender,_title);
     }
 
+    /// @dev add Adherent
+    /// @param _pid poolID
+    /// @param _adherent addherent wallet address
     function addAdherent(uint _pid, address _adherent) external  projectExistIsOwnerOngoing(_pid){
         address[] storage adherents = projectInfo[_pid].adherents;
         adherents.push(_adherent);
