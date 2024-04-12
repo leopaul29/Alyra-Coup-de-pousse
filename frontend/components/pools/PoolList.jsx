@@ -105,7 +105,7 @@ const PoolList = () => {
 		},
 	});
 	const claimReward = async () => {
-		if (!isNaN(Number(rewardsClaimable)) && Number(rewardsClaimable) > 0) {
+		if (!isNaN(Number(rewardsClaimable)) > 0) {
 			writeContract({
 				address: cdpStakingAddress,
 				abi: cdpStakingAbi,
